@@ -20,18 +20,26 @@ public class NPCController : MonoBehaviour {
             int randomizer = Random.Range(0, NPCs.Length);
             mTarget = NPCs[randomizer];
         }
+
+        Debug.Log(Mathf.PI / 2 + ", " + Mathf.PI / 2 * Mathf.Rad2Deg);
+
+        transform.eulerAngles = new Vector3(1, (Mathf.PI / 2) * Mathf.Rad2Deg, 1);
     }
 
     void Update () {
         Vector3 direction = mTarget.transform.position - transform.position;
-        mVelocity = mMaxVelocity * direction.normalized / Mathf.Sqrt(2);
-        Vector3 currentRot = transform.rotation.eulerAngles;
-        mAngularVelocity = mMaxAngularVelocity * direction.normalized / Mathf.Sqrt(2);
+        Vector3 lookingAt = transform.rotation.eulerAngles;
 
+        mVelocity = mMaxVelocity * direction.normalized / Mathf.Sqrt(2);
+
+        float angle = Mathf.Cos((Vector3.Dot(lookingAt, direction)) / (lookingAt.magnitude * direction.magnitude));
+
+        Debug.Log(angle);
 
         Vector3 newPos = transform.position + (mVelocity * Time.deltaTime);
-        //Vector3 newAngle = 
+        Vector3 newRot = transform.rotation.eulerAngles + (new Vector3(1, (angle * Mathf.Rad2Deg), 1) * Time.deltaTime);
 
+        transform.rotation = Quaternion.Euler(newRot);
         transform.position = newPos;
-	}
+    }
 }
