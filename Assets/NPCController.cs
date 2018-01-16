@@ -5,6 +5,8 @@ using UnityEngine;
 public class NPCController : MonoBehaviour {
 
     public bool mType;
+    public float mMaxVelocity;
+    public float mMaxAngularVelocity;
     public GameObject mTarget;
 
     private Vector3 mVelocity;
@@ -21,10 +23,14 @@ public class NPCController : MonoBehaviour {
     }
 
     void Update () {
+        Vector3 direction = mTarget.transform.position - transform.position;
+        mVelocity = mMaxVelocity * direction.normalized / Mathf.Sqrt(2);
+        Vector3 currentRot = transform.rotation.eulerAngles;
+        mAngularVelocity = mMaxAngularVelocity * direction.normalized / Mathf.Sqrt(2);
 
-        mVelocity = (mTarget.transform.position - transform.position) / Mathf.Sqrt(2);
 
         Vector3 newPos = transform.position + (mVelocity * Time.deltaTime);
+        //Vector3 newAngle = 
 
         transform.position = newPos;
 	}

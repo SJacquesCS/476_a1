@@ -376,6 +376,11 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mMaxVelocity
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
   m_IsPrefabParent: 0
@@ -476,6 +481,11 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mMaxVelocity
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
   m_IsPrefabParent: 0
@@ -526,6 +536,11 @@ Prefab:
     - target: {fileID: 1517817716984534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
       propertyPath: m_Name
       value: NPC Pink
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mMaxVelocity
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
@@ -621,6 +636,11 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mMaxVelocity
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
