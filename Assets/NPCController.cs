@@ -5,11 +5,12 @@ using UnityEngine;
 public class NPCController : MonoBehaviour {
 
     public bool mType;
-    public float mMaxVelocity;
+    public float mMaxAcceleration;
     public float mMaxAngularVelocity;
     public GameObject mTarget;
 
     private Vector3 mVelocity;
+    private Vector3 mAcceleration;
     private Vector3 mAngularVelocity;
 
     private void Awake()
@@ -28,18 +29,16 @@ public class NPCController : MonoBehaviour {
 
     void Update () {
         Vector3 direction = mTarget.transform.position - transform.position;
-        Vector3 lookingAt = transform.rotation.eulerAngles;
+        Vector3 lookingAt = transform.eulerAngles;
 
-        mVelocity = mMaxVelocity * direction.normalized / Mathf.Sqrt(2);
+        mAcceleration = mMaxAcceleration * (direction.normalized / Mathf.Sqrt(2));
+        mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
 
-        float angle = Mathf.Cos((Vector3.Dot(lookingAt, direction)) / (lookingAt.magnitude * direction.magnitude));
+        transform.position = transform.position + (mVelocity * Time.deltaTime);
 
-        Debug.Log(angle);
-
-        Vector3 newPos = transform.position + (mVelocity * Time.deltaTime);
-        Vector3 newRot = transform.rotation.eulerAngles + (new Vector3(1, (angle * Mathf.Rad2Deg), 1) * Time.deltaTime);
-
-        transform.rotation = Quaternion.Euler(newRot);
-        transform.position = newPos;
+        //float angle = Vector3.Angle(lookingAt, direction);
+        //Debug.Log(angle);
+        //Vector3 newRot = transform.rotation.eulerAngles + (new Vector3(1, (angle), 1) * Time.deltaTime);
+        //transform.rotation = Quaternion.Euler(newRot);
     }
 }
