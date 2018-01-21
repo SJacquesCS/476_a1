@@ -37,37 +37,46 @@ public class NPCController : MonoBehaviour {
         Vector3 direction = mTarget.transform.position - transform.position;
         Vector3 lookingAt = transform.eulerAngles;
 
-        Seek(direction, lookingAt);
+        KinematicSeek(direction, lookingAt);
+        //DynamicSeek(direction, lookingAt);
 
-        if (direction.magnitude < mArriveRadius)
-            mVelocity = Vector3.zero;
-        else if (direction.magnitude < mSlowRadius)
-        {
-            if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
-                mVelocity = mVelocity / mTimeToArrive;
-        }
+        //if (direction.magnitude < mArriveRadius)
+        //    mVelocity = Vector3.zero;
+        //else if (direction.magnitude < mSlowRadius)
+        //{
+        //    if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
+        //        mVelocity = mVelocity / mTimeToArrive;
+        //}
 
-        if (mChangeTargetTimer <= 0)
-        {
-            mChangeTargetTimer = 2.5f;
-            int randomizer = Random.Range(0, NPCs.Length);
-            mTarget = NPCs[randomizer];
-        }
+        //if (mChangeTargetTimer <= 0)
+        //{
+        //    mChangeTargetTimer = 2.5f;
+        //    int randomizer = Random.Range(0, NPCs.Length);
+        //    mTarget = NPCs[randomizer];
+        //}
 
-        if (mChangeTargetTimer > 0)
-            mChangeTargetTimer -= 0.05f;
+        //if (mChangeTargetTimer > 0)
+        //    mChangeTargetTimer -= 0.01f;
 
-        //float angle = Vector3.Angle(lookingAt, direction);
+        float angle;
 
-        //if (mVelocity.magnitude > mMaxVelocity)
-        //    mVelocity = new Vector3(mMaxVelocity * Mathf.Sin(angle), mVelocity.y, mMaxVelocity * Mathf.Cos(angle));
+        angle = Vector3.Angle(lookingAt, direction);
 
-        //Debug.Log(angle);
-        //Vector3 newRot = transform.rotation.eulerAngles + (new Vector3(1, (angle), 1) * Time.deltaTime);
-        //transform.rotation = Quaternion.Euler(newRot);
+        Debug.Log(angle);
+
+        angle = transform.eulerAngles.y + 1;
+
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
     }
 
-    private void Seek(Vector3 direction, Vector3 lookingAt)
+    private void KinematicSeek(Vector3  direction, Vector3 lookingAt)
+    {
+        mVelocity = mMaxVelocity * (direction.normalized / Mathf.Sqrt(2));
+
+        transform.position = transform.position + (mVelocity * Time.deltaTime);
+    }
+
+    private void DynamicSeek(Vector3 direction, Vector3 lookingAt)
     {
         mAcceleration = mMaxAcceleration * (direction.normalized / Mathf.Sqrt(2));
         mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
