@@ -60,13 +60,13 @@ public class NPCController : MonoBehaviour {
 
         float angle;
 
-        angle = Vector3.Angle(lookingAt, direction);
+        angle = Mathf.Sin(lookingAt.magnitude / direction.magnitude);
 
-        Debug.Log(angle);
+        Debug.Log(angle * Mathf.Rad2Deg);
 
-        angle = transform.eulerAngles.y + 1;
+        //angle = transform.eulerAngles.y + 1;
 
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+        //transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
     }
 
     private void KinematicSeek(Vector3  direction, Vector3 lookingAt)
