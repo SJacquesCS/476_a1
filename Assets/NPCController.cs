@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour {
 
-    public bool mType;
+    public bool mKinematic;
+    public bool mSeek;
     public float mMaxAcceleration;
     public float mMaxVelocity;
     public float mMaxAngularVelocity;
     public float mSlowRadius;
     public float mArriveRadius;
     public float mTimeToArrive;
+
     public GameObject mTarget;
+    public GameObject mArena;
 
     private Vector3 mVelocity;
     private Vector3 mAcceleration;
     private Vector3 mAngularVelocity;
+    private Vector3 mDirection;
+    private Vector3 mLookingAt;
 
     private float mChangeTargetTimer;
 
@@ -34,19 +39,23 @@ public class NPCController : MonoBehaviour {
     }
 
     void Update () {
-        Vector3 direction = mTarget.transform.position - transform.position;
-        Vector3 lookingAt = transform.eulerAngles;
 
-        KinematicSeek(direction, lookingAt);
-        //DynamicSeek(direction, lookingAt);
+        if (mKinematic)
+        {
+            if (mSeek)
+                KinematicSeek();
+            else
+                KinematicFlee();
+        }
+        else
+        {
+            if (mSeek)
+                DynamicSeek();
+            else
+                DynamicFlee();
+        }
 
-        //if (direction.magnitude < mArriveRadius)
-        //    mVelocity = Vector3.zero;
-        //else if (direction.magnitude < mSlowRadius)
-        //{
-        //    if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
-        //        mVelocity = mVelocity / mTimeToArrive;
-        //}
+        ClampToArena();
 
         //if (mChangeTargetTimer <= 0)
         //{
@@ -58,31 +67,69 @@ public class NPCController : MonoBehaviour {
         //if (mChangeTargetTimer > 0)
         //    mChangeTargetTimer -= 0.01f;
 
-        float angle;
-
-        angle = Mathf.Sin(lookingAt.magnitude / direction.magnitude);
-
-        Debug.Log(angle * Mathf.Rad2Deg);
-
-        //angle = transform.eulerAngles.y + 1;
-
-        //transform.eulerAngles = new Vector3(transform.eulerAngles.x, angle, transform.eulerAngles.z);
+        Vector3 newRot = Vector3.RotateTowards(transform.forward, mDirection, mMaxAngularVelocity * Time.deltaTime, 0.0f);
+        transform.rotation = Quaternion.LookRotation(newRot);
     }
 
-    private void KinematicSeek(Vector3  direction, Vector3 lookingAt)
+    private void KinematicSeek()
     {
-        mVelocity = mMaxVelocity * (direction.normalized / Mathf.Sqrt(2));
-
+        mDirection = mTarget.transform.position - transform.position;
+        mVelocity = mMaxVelocity * (mDirection.normalized / Mathf.Sqrt(2));
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
 
-    private void DynamicSeek(Vector3 direction, Vector3 lookingAt)
+    private void KinematicFlee()
     {
-        mAcceleration = mMaxAcceleration * (direction.normalized / Mathf.Sqrt(2));
+        mDirection = transform.position - mTarget.transform.position;
+        mVelocity = mMaxVelocity * (mDirection.normalized / Mathf.Sqrt(2));
+        transform.position = transform.position + (mVelocity * Time.deltaTime);
+    }
+
+    private void DynamicSeek()
+    {
+        mDirection = mTarget.transform.position - transform.position;
+        mAcceleration = mMaxAcceleration * (mDirection.normalized / Mathf.Sqrt(2));
         mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
 
-        Debug.Log(mVelocity.magnitude);
+        if (mVelocity.magnitude > mMaxVelocity)
+            mVelocity = Vector3.ClampMagnitude(mVelocity, mMaxVelocity);
 
         transform.position = transform.position + (mVelocity * Time.deltaTime);
+    }
+
+    private void DynamicFlee()
+    {
+        mDirection = transform.position - mTarget.transform.position;
+        mAcceleration = mMaxAcceleration * (mDirection.normalized / Mathf.Sqrt(2));
+        mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
+
+        if (mVelocity.magnitude > mMaxVelocity)
+            mVelocity = Vector3.ClampMagnitude(mVelocity, mMaxVelocity);
+
+        transform.position = transform.position + (mVelocity * Time.deltaTime);
+    }
+
+    private void KinematicArrive()
+    {
+        //if (direction.magnitude < mArriveRadius)
+        //    mVelocity = Vector3.zero;
+        //else if (direction.magnitude < mSlowRadius)
+        //{
+        //    if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
+        //        mVelocity = mVelocity / mTimeToArrive;
+        //}
+    }
+
+    private void ClampToArena()
+    {
+        if (transform.position.x > mArena.transform.position.x + (mArena.transform.localScale.x / 2))
+            transform.position = new Vector3(mArena.transform.position.x - (mArena.transform.localScale.x / 2), transform.position.y, transform.position.z);
+        else if (transform.position.x < mArena.transform.position.x - (mArena.transform.localScale.x / 2))
+            transform.position = new Vector3(mArena.transform.position.x + (mArena.transform.localScale.x / 2), transform.position.y, transform.position.z);
+
+        if (transform.position.z > mArena.transform.position.z + (mArena.transform.localScale.z / 2))
+            transform.position = new Vector3(transform.position.x, transform.position.y, mArena.transform.position.z - (mArena.transform.localScale.z / 2));
+        else if (transform.position.z < mArena.transform.position.z - (mArena.transform.localScale.z / 2))
+            transform.position = new Vector3(transform.position.x, transform.position.y, mArena.transform.position.z + (mArena.transform.localScale.z / 2));
     }
 }
