@@ -43,7 +43,10 @@ public class NPCController : MonoBehaviour {
         if (mKinematic)
         {
             if (mSeek)
+            {
                 KinematicSeek();
+                //KinematicArrive();
+            }
             else
                 KinematicFlee();
         }
@@ -67,14 +70,28 @@ public class NPCController : MonoBehaviour {
         //if (mChangeTargetTimer > 0)
         //    mChangeTargetTimer -= 0.01f;
 
-        Vector3 newRot = Vector3.RotateTowards(transform.forward, mDirection, mMaxAngularVelocity * Time.deltaTime, 0.0f);
-        transform.rotation = Quaternion.LookRotation(newRot);
+        if (mDirection.magnitude > mArriveRadius)
+        {
+            Vector3 newRot = Vector3.RotateTowards(transform.forward, mDirection, mMaxAngularVelocity * Time.deltaTime, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newRot);
+        }
     }
 
     private void KinematicSeek()
     {
         mDirection = mTarget.transform.position - transform.position;
         mVelocity = mMaxVelocity * (mDirection.normalized / Mathf.Sqrt(2));
+
+        Debug.Log(mDirection.magnitude + ", " + mArriveRadius);
+
+        if (mDirection.magnitude < mArriveRadius)
+            mVelocity = Vector3.zero;
+        else if (mDirection.magnitude < mSlowRadius)
+        {
+            if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
+                mVelocity = mVelocity / mTimeToArrive;
+        }
+
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
 
@@ -111,13 +128,15 @@ public class NPCController : MonoBehaviour {
 
     private void KinematicArrive()
     {
-        //if (direction.magnitude < mArriveRadius)
-        //    mVelocity = Vector3.zero;
-        //else if (direction.magnitude < mSlowRadius)
-        //{
-        //    if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
-        //        mVelocity = mVelocity / mTimeToArrive;
-        //}
+        Debug.Log(mDirection.magnitude + ", " + mArriveRadius);
+
+        if (mDirection.magnitude < mArriveRadius)
+            mVelocity = Vector3.zero;
+        else if (mDirection.magnitude < mSlowRadius)
+        {
+            if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
+                mVelocity = mVelocity / mTimeToArrive;
+        }
     }
 
     private void ClampToArena()

@@ -460,7 +460,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -480,17 +480,17 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mArriveRadius
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSlowRadius
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -501,6 +501,16 @@ Prefab:
         type: 2}
       propertyPath: mMaxAngularVelocity
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mSeek
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
@@ -595,7 +605,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -615,17 +625,17 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mArriveRadius
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSlowRadius
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -640,6 +650,11 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSeek
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mKinematic
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -735,7 +750,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -755,22 +770,22 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
-        type: 2}
-      propertyPath: mArriveRadius
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
-        type: 2}
-      propertyPath: mSlowRadius
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
+      propertyPath: mArriveRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mSlowRadius
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
       propertyPath: mKinematic
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -785,7 +800,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSeek
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
@@ -880,7 +895,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -900,22 +915,22 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
-        type: 2}
-      propertyPath: mArriveRadius
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
-        type: 2}
-      propertyPath: mSlowRadius
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
+      propertyPath: mArriveRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mSlowRadius
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
       propertyPath: mKinematic
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -930,7 +945,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSeek
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
@@ -1025,7 +1040,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -1045,17 +1060,17 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mArriveRadius
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSlowRadius
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -1070,6 +1085,11 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSeek
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mKinematic
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1118,7 +1138,7 @@ Prefab:
         type: 2}
       propertyPath: mTarget
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2033403564}
     - target: {fileID: 1517817716984534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
       propertyPath: m_Name
       value: NPC Pink
@@ -1146,7 +1166,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSlowRadius
-      value: 5
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4479450301367188, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
       propertyPath: m_LocalScale.x
@@ -1173,6 +1193,16 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSeek
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1352,7 +1382,7 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -1372,17 +1402,17 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mArriveRadius
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSlowRadius
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
@@ -1393,6 +1423,16 @@ Prefab:
         type: 2}
       propertyPath: mMaxAngularVelocity
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mSeek
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
@@ -1546,6 +1586,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 25, y: 0, z: 0}
+--- !u!1 &2033403564 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1517817716984534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+    type: 2}
+  m_PrefabInternal: {fileID: 671858788}
 --- !u!1001 &2082432868
 Prefab:
   m_ObjectHideFlags: 0
@@ -1607,17 +1652,17 @@ Prefab:
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mTimeToArrive
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mArriveRadius
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
         type: 2}
       propertyPath: mSlowRadius
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4479450301367188, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
       propertyPath: m_LocalScale.x
@@ -1645,6 +1690,16 @@ Prefab:
         type: 2}
       propertyPath: mSeek
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: mKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000515828462534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
