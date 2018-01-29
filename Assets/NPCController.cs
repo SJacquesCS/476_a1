@@ -6,12 +6,16 @@ public class NPCController : MonoBehaviour {
 
     public bool mKinematic;
     public bool mSeek;
+    public bool mWander;
+
     public float mMaxAcceleration;
     public float mMaxVelocity;
     public float mMaxAngularVelocity;
     public float mSlowRadius;
     public float mArriveRadius;
     public float mTimeToArrive;
+    public float mWanderRadius;
+    public float mWanderChangeTimer;
 
     public GameObject mTarget;
     public GameObject mArena;
@@ -22,20 +26,25 @@ public class NPCController : MonoBehaviour {
     private Vector3 mDirection;
     private Vector3 mLookingAt;
 
-    private float mChangeTargetTimer;
+    private float mTimer;
 
     private GameObject[] NPCs;
 
     private void Awake()
     {
-        if (!mTarget)
+        if (mWander)
+        {
+            mTarget = new GameObject();
+            Vector2 randomCircle = Random.insideUnitCircle * mWanderRadius;
+            mTarget.transform.position = transform.position + (transform.forward * 5) + new Vector3(randomCircle.x, 0, randomCircle.y);
+            mTimer = mWanderChangeTimer;
+        }
+        else if (!mTarget)
         {
             NPCs = GameObject.FindGameObjectsWithTag("NPC");
             int randomizer = Random.Range(0, NPCs.Length);
             mTarget = NPCs[randomizer];
         }
-
-        mChangeTargetTimer = 2.5f;
     }
 
     void Update () {
@@ -49,6 +58,9 @@ public class NPCController : MonoBehaviour {
             }
             else
                 KinematicFlee();
+
+            if (mWander)
+                KinematicWander();
         }
         else
         {
@@ -59,16 +71,6 @@ public class NPCController : MonoBehaviour {
         }
 
         ClampToArena();
-
-        //if (mChangeTargetTimer <= 0)
-        //{
-        //    mChangeTargetTimer = 2.5f;
-        //    int randomizer = Random.Range(0, NPCs.Length);
-        //    mTarget = NPCs[randomizer];
-        //}
-
-        //if (mChangeTargetTimer > 0)
-        //    mChangeTargetTimer -= 0.01f;
 
         if (mDirection.magnitude > mArriveRadius)
         {
@@ -81,8 +83,6 @@ public class NPCController : MonoBehaviour {
     {
         mDirection = mTarget.transform.position - transform.position;
         mVelocity = mMaxVelocity * (mDirection.normalized / Mathf.Sqrt(2));
-
-        Debug.Log(mDirection.magnitude + ", " + mArriveRadius);
 
         if (mDirection.magnitude < mArriveRadius)
             mVelocity = Vector3.zero;
@@ -136,6 +136,19 @@ public class NPCController : MonoBehaviour {
         {
             if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
                 mVelocity = mVelocity / mTimeToArrive;
+        }
+    }
+
+    private void KinematicWander()
+    {
+        if (mTimer > 0)
+            mTimer -= Time.deltaTime;
+
+        if (mTimer <= 0)
+        {
+            mTimer = mWanderChangeTimer;
+            Vector2 randomCircle = Random.insideUnitCircle * mWanderRadius;
+            mTarget.transform.position = transform.position + (transform.forward * 5) + new Vector3(randomCircle.x, 0, randomCircle.y);
         }
     }
 
