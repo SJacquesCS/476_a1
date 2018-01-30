@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour {
 
-    public bool mKinematic;
-    public bool mSeek;
-    public bool mWander;
+    public enum Function {KinematicSeek, KinematicFlee, DynamicSeek, DynamicFlee, Wander};
+    public Function mFunction;
+    public bool mArrive;
 
     public float mMaxAcceleration;
     public float mMaxVelocity;
@@ -32,7 +32,7 @@ public class NPCController : MonoBehaviour {
 
     private void Awake()
     {
-        if (mWander)
+        if (mFunction == Function.Wander)
         {
             mTarget = new GameObject();
             Vector2 randomCircle = Random.insideUnitCircle * mWanderRadius;
@@ -49,48 +49,39 @@ public class NPCController : MonoBehaviour {
 
     void Update () {
 
-        if (mKinematic)
+        switch(mFunction)
         {
-            if (mSeek)
-            {
+            case Function.KinematicSeek:
                 KinematicSeek();
-                //KinematicArrive();
-            }
-            else
+                break;
+            case Function.KinematicFlee:
                 KinematicFlee();
-
-            if (mWander)
-                KinematicWander();
-        }
-        else
-        {
-            if (mSeek)
+                break;
+            case Function.DynamicSeek:
                 DynamicSeek();
-            else
+                break;
+            case Function.DynamicFlee:
                 DynamicFlee();
+                break;
+            case Function.Wander:
+                Wander();
+                break;
         }
+
+        Orientate();
 
         ClampToArena();
-
-        if (mDirection.magnitude > mArriveRadius)
-        {
-            Vector3 newRot = Vector3.RotateTowards(transform.forward, mDirection, mMaxAngularVelocity * Time.deltaTime, 0.0f);
-            transform.rotation = Quaternion.LookRotation(newRot);
-        }
     }
 
     private void KinematicSeek()
     {
         mDirection = mTarget.transform.position - transform.position;
-        mVelocity = mMaxVelocity * (mDirection.normalized / Mathf.Sqrt(2));
+        mVelocity = mMaxVelocity * mDirection.normalized;
 
-        if (mDirection.magnitude < mArriveRadius)
-            mVelocity = Vector3.zero;
-        else if (mDirection.magnitude < mSlowRadius)
-        {
-            if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
-                mVelocity = mVelocity / mTimeToArrive;
-        }
+        if (mArrive)
+            KinematicArrive();
+
+        Debug.Log(mVelocity.magnitude);
 
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
@@ -98,14 +89,14 @@ public class NPCController : MonoBehaviour {
     private void KinematicFlee()
     {
         mDirection = transform.position - mTarget.transform.position;
-        mVelocity = mMaxVelocity * (mDirection.normalized / Mathf.Sqrt(2));
+        mVelocity = mMaxVelocity * mDirection.normalized;
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
 
     private void DynamicSeek()
     {
         mDirection = mTarget.transform.position - transform.position;
-        mAcceleration = mMaxAcceleration * (mDirection.normalized / Mathf.Sqrt(2));
+        mAcceleration = mMaxAcceleration * mDirection.normalized;
         mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
 
         if (mVelocity.magnitude > mMaxVelocity)
@@ -117,7 +108,7 @@ public class NPCController : MonoBehaviour {
     private void DynamicFlee()
     {
         mDirection = transform.position - mTarget.transform.position;
-        mAcceleration = mMaxAcceleration * (mDirection.normalized / Mathf.Sqrt(2));
+        mAcceleration = mMaxAcceleration * mDirection.normalized;
         mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
 
         if (mVelocity.magnitude > mMaxVelocity)
@@ -126,20 +117,26 @@ public class NPCController : MonoBehaviour {
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
 
+    private void Orientate()
+    {
+        if (mDirection.magnitude > mArriveRadius)
+        {
+            Vector3 newRot = Vector3.RotateTowards(transform.forward, mDirection, mMaxAngularVelocity * Time.deltaTime, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newRot);
+        }
+    }
+
     private void KinematicArrive()
     {
-        Debug.Log(mDirection.magnitude + ", " + mArriveRadius);
-
         if (mDirection.magnitude < mArriveRadius)
             mVelocity = Vector3.zero;
         else if (mDirection.magnitude < mSlowRadius)
         {
-            if ((mVelocity.magnitude / mTimeToArrive) < mMaxVelocity)
-                mVelocity = mVelocity / mTimeToArrive;
+            mVelocity = Vector3.Min(mMaxVelocity * mDirection.normalized, mDirection / mTimeToArrive);
         }
     }
 
-    private void KinematicWander()
+    private void Wander()
     {
         if (mTimer > 0)
             mTimer -= Time.deltaTime;
