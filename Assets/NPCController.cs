@@ -8,6 +8,7 @@ public class NPCController : MonoBehaviour {
     public Function mFunction;
     public bool mArrive;
 
+    [Header("Movement Variables")]
     public float mMaxAcceleration;
     public float mMaxVelocity;
     public float mMaxAngularVelocity;
@@ -17,6 +18,11 @@ public class NPCController : MonoBehaviour {
     public float mWanderRadius;
     public float mWanderChangeTimer;
 
+    [Header("Assignment Variables")]
+    public float mSlowSpeed;
+    public float mSmallDistance;
+
+    [Header("Game Objects")]
     public GameObject mTarget;
     public GameObject mArena;
 
@@ -68,9 +74,29 @@ public class NPCController : MonoBehaviour {
                 break;
         }
 
-        Orientate();
+        if (mVelocity.magnitude < mSlowSpeed)
+        {
+            if (mDirection.magnitude < mSmallDistance)
+                KinematicSeek();
+            else
+            {
+                if (transform.forward.normalized == mDirection.normalized)
+                    KinematicSeek();
+                else
+                    Orientate();
+            }
+        }
+        else
+        {
+
+        }
 
         ClampToArena();
+    }
+
+    private void GenerteCone()
+    {
+
     }
 
     private void KinematicSeek()
