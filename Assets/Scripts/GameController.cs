@@ -28,10 +28,12 @@ public class GameController : MonoBehaviour
         taggedCtr = 1;
         untaggedCtr = totalNPC - 1;
 
-        int randomTagged = Random.Range(0, untaggedCtr);
+        int randomTagged;
 
         if (newSetup)
         {
+            randomTagged = Random.Range(0, untaggedCtr);
+
             for (int i = 0; i < totalNPC; i++)
             {
                 Vector3 randomLocation = new Vector3(
@@ -52,7 +54,7 @@ public class GameController : MonoBehaviour
         {
             GameObject[] NPCs = GameObject.FindGameObjectsWithTag("NPC");
 
-            Debug.Log(NPCs.Length);
+            randomTagged = Random.Range(0, NPCs.Length - 1);
 
             for (int i = 0; i < NPCs.Length; i++)
             {
@@ -80,21 +82,15 @@ public class GameController : MonoBehaviour
     {
         foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
         {
-            switch (NPC.GetComponent<NPCController>().mFunction)
+            switch (NPC.GetComponent<NPCController>().mMode)
             {
-                case NPCController.Function.KinematicSeek:
+                case NPCController.Mode.Kinematic:
                     Debug.Log("Changing to Dynamic");
-                    NPC.GetComponent<NPCController>().mFunction = NPCController.Function.DynamicSeek;
+                    NPC.GetComponent<NPCController>().mMode = NPCController.Mode.Dynamic;
                     break;
-                case NPCController.Function.DynamicSeek:
+                case NPCController.Mode.Dynamic:
                     Debug.Log("Changing to Kinematic");
-                    NPC.GetComponent<NPCController>().mFunction = NPCController.Function.KinematicSeek;
-                    break;
-                case NPCController.Function.KinematicFlee:
-                    NPC.GetComponent<NPCController>().mFunction = NPCController.Function.DynamicFlee;
-                    break;
-                case NPCController.Function.DynamicFlee:
-                    NPC.GetComponent<NPCController>().mFunction = NPCController.Function.KinematicFlee;
+                    NPC.GetComponent<NPCController>().mMode = NPCController.Mode.Kinematic;
                     break;
             }
         }

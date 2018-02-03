@@ -174,7 +174,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -190,7 +189,6 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -208,7 +206,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -224,7 +221,6 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -242,7 +238,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -258,7 +253,6 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -276,7 +270,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -292,7 +285,6 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -340,19 +332,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47286dcd4fd81274b954e7699a0be03a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mFunction: 0
+  mMode: 0
   mState: 3
   mArrive: 0
   mMaxAcceleration: 5
   mMaxVelocity: 11
   mMaxAngularVelocity: 10
   mSlowRadius: 10
-  mArriveRadius: 1
+  mArriveRadius: 2.5
   mTimeToArrive: 1.5
   mWanderRadius: 1
   mWanderChangeTimer: 0.1
   mSlowSpeed: 100
   mSmallDistance: 10
+  mFleeDistance: 7.5
   mFire: {fileID: 1197557200977834, guid: 469cb77470776ad42b1a4e79155fa7e7, type: 2}
   mTagged: {fileID: 2100000, guid: 6fc0f2b3a5bcd81489a87ea94ffa96cb, type: 2}
   mUntagged: {fileID: 2100000, guid: c448728ff0057194d99ed676960b25a6, type: 2}
