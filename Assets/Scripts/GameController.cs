@@ -47,7 +47,7 @@ public class GameController : MonoBehaviour
                 if (i == randomTagged)
                     NPC.GetComponent<NPCController>().ChangeState(NPCController.State.Tagged);
                 else
-                    NPC.GetComponent<NPCController>().ChangeState(NPCController.State.Untagged);
+                    NPC.GetComponent<NPCController>().ChangeState(NPCController.State.Wander);
             }
         }
         else
@@ -61,7 +61,7 @@ public class GameController : MonoBehaviour
                 if (i == randomTagged)
                     NPCs[i].GetComponent<NPCController>().ChangeState(NPCController.State.Tagged);
                 else
-                    NPCs[i].GetComponent<NPCController>().ChangeState(NPCController.State.Untagged);
+                    NPCs[i].GetComponent<NPCController>().ChangeState(NPCController.State.Wander);
             }
         }
     }

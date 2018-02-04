@@ -555,7 +555,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65479633e6c01b84d87b48ccd4f3b50c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalNPC: 10
+  totalNPC: 5
   npcs: {fileID: 1517817716984534, guid: ddb32c19a4122d84b95fd2c5bdbc23f9, type: 2}
   arena: {fileID: 124041268}
 --- !u!4 &1313787871

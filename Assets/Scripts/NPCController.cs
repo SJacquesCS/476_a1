@@ -5,7 +5,7 @@ using UnityEngine;
 public class NPCController : MonoBehaviour {
 
     public enum Mode {Kinematic, Dynamic};
-    public enum State {Tagged, Untagged, Frozen, None};
+    public enum State {Tagged, Wander, Frozen, Help, Flee, None};
 
     public Mode mMode;
     public State mState;
@@ -52,6 +52,7 @@ public class NPCController : MonoBehaviour {
     private GameObject mArena;
     private GameObject mTarget;
     private GameObject mGameController;
+    private GameObject mTaggedNPC;
 
     private void Start()
     {
@@ -71,11 +72,17 @@ public class NPCController : MonoBehaviour {
             case State.Tagged:
                 TaggedAction();
                 break;
-            case State.Untagged:
-                UntaggedAction();
+            case State.Wander:
+                WanderAction();
                 break;
             case State.None:
                 mVelocity = Vector3.zero;
+                break;
+            case State.Flee:
+                FleeAction();
+                break;
+            case State.Help:
+                HelpAction();
                 break;
         }
 
@@ -94,33 +101,48 @@ public class NPCController : MonoBehaviour {
         Orientate();
     }
 
-    private void UntaggedAction()
+    private void WanderAction()
     {
         List<GameObject> frozenNPCs = new List<GameObject>();
-        GameObject taggedNPC = null;
         
         foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
         {
             if (NPC.GetComponent<NPCController>().mState == State.Frozen)
                 frozenNPCs.Add(NPC);
             else if (NPC.GetComponent<NPCController>().mState == State.Tagged)
-                taggedNPC = NPC;
+                mTaggedNPC = NPC;
         }
 
-        float taggedNPCDistance = (taggedNPC.transform.position - transform.position).magnitude;
+        float taggedNPCDistance = (mTaggedNPC.transform.position - transform.position).magnitude;
 
         if (taggedNPCDistance < mFleeDistance)
         {
-            if (mIsHelping)
-                mIsHelping = false;
+            ChangeState(State.Flee);
+        }
+        else if (frozenNPCs.Count > 0)
+        {
+            ChangeState(State.Help);
+        }
+        else
+        {
+            ChangeState(State.Wander);
+            Wander();
+        }
 
-            if (!mIsFleeing)
-            {
-                mIsFleeing = true;
-                mTarget = taggedNPC;
-            }
+        Orientate();
+    }
 
-            switch(mMode)
+    private void FleeAction()
+    {
+        mTarget = mTaggedNPC;
+
+        float taggedDistance = (mTarget.transform.position - transform.position).magnitude;
+
+        if (taggedDistance > mFleeDistance)
+            ChangeState(State.Wander);
+        else
+        {
+            switch (mMode)
             {
                 case Mode.Kinematic:
                     KinematicFlee();
@@ -130,36 +152,47 @@ public class NPCController : MonoBehaviour {
                     break;
             }
         }
-        else if (frozenNPCs.Count > 0)
-        {
-            if (mIsFleeing)
-                mIsFleeing = false;
 
-            if (!mIsHelping)
-            {
-                mIsHelping = true;
-                int randomTarget = Random.Range(0, frozenNPCs.Count - 1);
-                mTarget = frozenNPCs[randomTarget];
-            }
+        Orientate();
+    }
 
-            switch (mMode)
-            {
-                case Mode.Kinematic:
-                    KinematicSeek();
-                    break;
-                case Mode.Dynamic:
-                    DynamicSeek();
-                    break;
-            }
-        }
+    private void HelpAction()
+    {
+        float taggedDistance = (mTaggedNPC.transform.position - transform.position).magnitude;
+
+        if (taggedDistance < mFleeDistance)
+            ChangeState(State.Flee);
         else
         {
-            if (mIsHelping)
-                mIsHelping = false;
-            if (mIsFleeing)
-                mIsFleeing = false;
+            float smallestDistance = float.MaxValue;
+            int frozenCtr = 0;
 
-            Wander();
+            foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
+            {
+                float distance = (NPC.transform.position - transform.position).magnitude;
+
+                if (distance < smallestDistance && NPC.GetComponent<NPCController>().mState == State.Frozen)
+                {
+                    frozenCtr++;
+                    mTarget = NPC;
+                    smallestDistance = distance;
+                }
+            }
+
+            if (frozenCtr > 0)
+            {
+                switch (mMode)
+                {
+                    case Mode.Kinematic:
+                        KinematicSeek();
+                        break;
+                    case Mode.Dynamic:
+                        DynamicSeek();
+                        break;
+                }
+            }
+            else
+                ChangeState(State.Wander);
         }
 
         Orientate();
@@ -274,7 +307,8 @@ public class NPCController : MonoBehaviour {
 
         foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
         {
-            if (NPC.GetComponent<NPCController>().mState == State.Untagged && (transform.position - NPC.transform.position).magnitude < smallestDistance)
+            if ((NPC.GetComponent<NPCController>().mState == State.Wander || NPC.GetComponent<NPCController>().mState == State.Flee || NPC.GetComponent<NPCController>().mState == State.Help)
+                && (transform.position - NPC.transform.position).magnitude < smallestDistance)
             {
                 mTarget = NPC;
                 smallestDistance = (transform.position - NPC.transform.position).magnitude;
@@ -287,15 +321,15 @@ public class NPCController : MonoBehaviour {
         GameController gc = mGameController.GetComponent<GameController>();
         NPCController npcController = mTarget.GetComponent<NPCController>();
         
-        if (mState == State.Tagged && npcController.mState == State.Untagged)
+        if (mState == State.Tagged && (npcController.mState == State.Wander || npcController.mState == State.Flee || npcController.mState == State.Help))
         {
             npcController.ChangeState(State.Frozen);
             gc.OnNPCTouch(1, 0, -1);
             AcquireTarget();
         }
-        else if (mState == State.Untagged && npcController.mState == State.Frozen)
+        else if (mState == State.Help && npcController.mState == State.Frozen)
         {
-            npcController.ChangeState(State.Untagged);
+            npcController.ChangeState(State.Wander);
             gc.OnNPCTouch(-1, 0, 1);
         }
     }
@@ -323,7 +357,7 @@ public class NPCController : MonoBehaviour {
                 AcquireTarget();
                 break;
 
-            case State.Untagged:
+            case State.Wander:
                 mMaxVelocity = 10;
                 mTimer = 0;
                 ChangeMaterial(mUntagged, mBlack);
@@ -333,6 +367,14 @@ public class NPCController : MonoBehaviour {
 
             case State.Frozen:
                 ChangeMaterial(mFrozen, mWhite);
+                break;
+
+            case State.Help:
+                ChangeMaterial(mHelping, mBlack);
+                break;
+
+            case State.Flee:
+                ChangeMaterial(mFleeing, mBlack);
                 break;
         }
 
