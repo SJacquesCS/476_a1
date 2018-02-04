@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -9,11 +10,17 @@ public class GameController : MonoBehaviour
     public GameObject npcs;
     public GameObject arena;
 
+    public Text mFrozenText;
+    public Text mUntaggedText;
+    public Text mTaggedText;
+    public Text mModeText;
+
     private int frozenCtr, taggedCtr, untaggedCtr;
 
     private void Start()
     {
         Setup(true);
+        Updatetext();
     }
 
     private void Update()
@@ -66,18 +73,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void OnNPCTouch(int frozen, int tagged, int untagged)
-    {
-        frozenCtr += frozen;
-        taggedCtr += tagged;
-        untaggedCtr += untagged;
-
-        if (frozenCtr >= totalNPC - 1)
-        {
-            Setup(false);
-        }
-    }
-
     private void ChangeMode()
     {
         foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
@@ -85,14 +80,35 @@ public class GameController : MonoBehaviour
             switch (NPC.GetComponent<NPCController>().mMode)
             {
                 case NPCController.Mode.Kinematic:
-                    Debug.Log("Changing to Dynamic");
                     NPC.GetComponent<NPCController>().mMode = NPCController.Mode.Dynamic;
+                    mModeText.text = "Mode: Dynamic";
                     break;
                 case NPCController.Mode.Dynamic:
-                    Debug.Log("Changing to Kinematic");
                     NPC.GetComponent<NPCController>().mMode = NPCController.Mode.Kinematic;
+                    mModeText.text = "Mode: Kinematic";
                     break;
             }
+        }
+    }
+
+    private void Updatetext()
+    {
+        mFrozenText.text = "Frozen: " + frozenCtr;
+        mUntaggedText.text = "Untagged: " + untaggedCtr;
+        mTaggedText.text = "Tagged: " + taggedCtr;
+    }
+
+    public void OnNPCTouch(int frozen, int tagged, int untagged)
+    {
+        frozenCtr += frozen;
+        taggedCtr += tagged;
+        untaggedCtr += untagged;
+
+        Updatetext();
+
+        if (frozenCtr >= totalNPC - 1)
+        {
+            Setup(false);
         }
     }
 }

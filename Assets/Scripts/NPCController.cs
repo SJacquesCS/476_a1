@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCController : MonoBehaviour {
-
+public class NPCController : MonoBehaviour
+{
     public enum Mode {Kinematic, Dynamic};
     public enum State {Tagged, Wander, Frozen, Help, Flee, None};
 
     public Mode mMode;
     public State mState;
-    public bool mArrive;
 
     [Header("Movement Variables")]
     public float mMaxAcceleration;
-    public float mMaxVelocity;
+    public float mMaxUntaggedVelocity;
+    public float mMaxTaggedVelocity;
     public float mMaxAngularVelocity;
     public float mSlowRadius;
     public float mArriveRadius;
     public float mTimeToArrive;
     public float mWanderRadius;
-    public float mWanderChangeTimer;
+    public float mWanderDistance;
 
     [Header("Assignment Variables")]
     public float mSlowSpeed;
@@ -44,7 +44,7 @@ public class NPCController : MonoBehaviour {
     private Vector3 mDirection;
     private Vector3 mLookingAt;
 
-    private float mTimer;
+    private float mMaxVelocity;
     private bool mIsHelping;
     private bool mIsFleeing;
 
@@ -56,14 +56,15 @@ public class NPCController : MonoBehaviour {
 
     private void Start()
     {
-        mTimer = 0;
+        // Initialize starting variables
         mIsHelping = mIsFleeing = false;
         mArena = GameObject.FindGameObjectWithTag("Arena");
         mGameController = GameObject.FindGameObjectWithTag("GameController");
     }
 
-    private void Update () {
-        // Check current state
+    private void Update ()
+    {
+        // Do action depending on state
         switch(mState)
         {
             case State.Frozen:
@@ -86,9 +87,11 @@ public class NPCController : MonoBehaviour {
                 break;
         }
 
+        // Ensure that NPCs stay within the arena
         ClampToArena();
     }
 
+    // Do the action of the tagged NPC
     private void TaggedAction()
     {
         AcquireTarget();
@@ -101,10 +104,11 @@ public class NPCController : MonoBehaviour {
         Orientate();
     }
 
+    // Do the action of the untagged wandering NPC
     private void WanderAction()
     {
+        // Get all frozen NPCs and tagged NPC
         List<GameObject> frozenNPCs = new List<GameObject>();
-        
         foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
         {
             if (NPC.GetComponent<NPCController>().mState == State.Frozen)
@@ -115,14 +119,17 @@ public class NPCController : MonoBehaviour {
 
         float taggedNPCDistance = (mTaggedNPC.transform.position - transform.position).magnitude;
 
+        // If tagged NPC is too close, flee
         if (taggedNPCDistance < mFleeDistance)
         {
             ChangeState(State.Flee);
         }
+        // If tagged NPC is far enough and there are frozen NPCs, help
         else if (frozenNPCs.Count > 0)
         {
             ChangeState(State.Help);
         }
+        // If tagged NPC is far and no frozen NPC, wander
         else
         {
             ChangeState(State.Wander);
@@ -132,12 +139,14 @@ public class NPCController : MonoBehaviour {
         Orientate();
     }
 
+    // Do the action of the fleeing NPC
     private void FleeAction()
     {
         mTarget = mTaggedNPC;
 
         float taggedDistance = (mTarget.transform.position - transform.position).magnitude;
 
+        // If tagged NPC is far enough, wander
         if (taggedDistance > mFleeDistance)
             ChangeState(State.Wander);
         else
@@ -156,10 +165,12 @@ public class NPCController : MonoBehaviour {
         Orientate();
     }
 
+    // Do the action of the helping NPC
     private void HelpAction()
     {
         float taggedDistance = (mTaggedNPC.transform.position - transform.position).magnitude;
 
+        // If tagged NPC is too close, flee
         if (taggedDistance < mFleeDistance)
             ChangeState(State.Flee);
         else
@@ -167,6 +178,7 @@ public class NPCController : MonoBehaviour {
             float smallestDistance = float.MaxValue;
             int frozenCtr = 0;
 
+            // Get all frozen NPCs and set the target as the closest one
             foreach (GameObject NPC in GameObject.FindGameObjectsWithTag("NPC"))
             {
                 float distance = (NPC.transform.position - transform.position).magnitude;
@@ -179,6 +191,7 @@ public class NPCController : MonoBehaviour {
                 }
             }
 
+            // if there are frozen NPCs, help them
             if (frozenCtr > 0)
             {
                 switch (mMode)
@@ -191,6 +204,7 @@ public class NPCController : MonoBehaviour {
                         break;
                 }
             }
+            // If no frozen NPCs, wander
             else
                 ChangeState(State.Wander);
         }
@@ -243,6 +257,11 @@ public class NPCController : MonoBehaviour {
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
 
+    private void KinematicArrive()
+    {
+
+    }
+
     private void Orientate()
     {
         if (mDirection.magnitude > mArriveRadius)
@@ -254,22 +273,13 @@ public class NPCController : MonoBehaviour {
 
     private void Wander()
     {
-        if (mTimer > 0)
-            mTimer -= Time.deltaTime;
-        else
-        {
-            mTarget = new GameObject();
+        mTarget = new GameObject();
 
-            Vector2 randomCircle = Random.insideUnitCircle * mWanderRadius;
-            mTarget.transform.position = transform.position + (transform.forward * 5) + new Vector3(randomCircle.x, 0, randomCircle.y);
-
-            mTimer = mWanderChangeTimer;
-        }
+        Vector2 randomCircle = Random.insideUnitCircle * mWanderRadius;
+        mTarget.transform.position = transform.position + (transform.forward * mWanderDistance) + new Vector3(randomCircle.x, 0, randomCircle.y);
 
         mDirection = mTarget.transform.position - transform.position;
         mVelocity = mMaxVelocity * mDirection.normalized;
-
-        Debug.Log(mMaxVelocity);
 
         transform.position = transform.position + (mVelocity * Time.deltaTime);
 
@@ -347,7 +357,7 @@ public class NPCController : MonoBehaviour {
         switch (state)
         {
             case State.Tagged:
-                mMaxVelocity = 13;
+                mMaxVelocity = mMaxTaggedVelocity;
                 ChangeMaterial(mTagged, mWhite);
                 if (transform.childCount < 5)
                 {
@@ -358,8 +368,7 @@ public class NPCController : MonoBehaviour {
                 break;
 
             case State.Wander:
-                mMaxVelocity = 10;
-                mTimer = 0;
+                mMaxVelocity = mMaxUntaggedVelocity;
                 ChangeMaterial(mUntagged, mBlack);
                 if (transform.childCount > 4)
                     Destroy(transform.GetChild(4).gameObject);
@@ -377,9 +386,6 @@ public class NPCController : MonoBehaviour {
                 ChangeMaterial(mFleeing, mBlack);
                 break;
         }
-
-        mAcceleration = Vector3.zero;
-        mVelocity = Vector3.zero;
 
         mState = state;
     }
