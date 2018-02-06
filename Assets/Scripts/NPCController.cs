@@ -96,12 +96,19 @@ public class NPCController : MonoBehaviour
     {
         AcquireTarget();
 
-        if (mMode == Mode.Kinematic)
-            KinematicSeek();
-        else
-            DynamicSeek();
+        if (mDirection.magnitude < mSmallDistance || CheckVectorSimilarities(mDirection.normalized, transform.forward))
+        {
+            if (mMode == Mode.Kinematic)
+                KinematicSeek();
+            else
+                DynamicSeek();
 
-        Orientate();
+            Orientate();
+        }
+        else
+        {
+            Orientate();
+        }
     }
 
     // Do the action of the untagged wandering NPC
@@ -217,8 +224,7 @@ public class NPCController : MonoBehaviour
         mDirection = mTarget.transform.position - transform.position;
         mVelocity = mMaxVelocity * mDirection.normalized;
 
-        if (mDirection.magnitude < mArriveRadius)
-            Arrive();
+        KinematicArrive();
 
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
@@ -233,14 +239,11 @@ public class NPCController : MonoBehaviour
     private void DynamicSeek()
     {
         mDirection = mTarget.transform.position - transform.position;
-        mAcceleration = mMaxAcceleration * mDirection.normalized;
+        DynamicArrive();
         mVelocity = mVelocity + (mAcceleration * Time.deltaTime);
 
         if (mVelocity.magnitude > mMaxVelocity)
             mVelocity = Vector3.ClampMagnitude(mVelocity, mMaxVelocity);
-
-        if (mDirection.magnitude < mArriveRadius)
-            Arrive();
 
         transform.position = transform.position + (mVelocity * Time.deltaTime);
     }
@@ -259,7 +262,20 @@ public class NPCController : MonoBehaviour
 
     private void KinematicArrive()
     {
+        if (mDirection.magnitude < mArriveRadius)
+            Arrive();
+        else if (mDirection.magnitude < mSlowRadius)
+            mVelocity = Vector3.Min(mVelocity, (mVelocity / mTimeToArrive));
+    }
 
+    private void DynamicArrive()
+    {
+        mAcceleration = mMaxAcceleration * mDirection.normalized;
+
+        if (mDirection.magnitude < mArriveRadius)
+            Arrive();
+        else if (mDirection.magnitude < mSlowRadius)
+            mAcceleration = mAcceleration / mTimeToArrive;
     }
 
     private void Orientate()

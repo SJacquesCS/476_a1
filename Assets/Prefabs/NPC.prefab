@@ -334,13 +334,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mMode: 0
   mState: 3
-  mMaxAcceleration: 33.33
+  mMaxAcceleration: 50
   mMaxUntaggedVelocity: 10
   mMaxTaggedVelocity: 15
   mMaxAngularVelocity: 10
-  mSlowRadius: 10
+  mSlowRadius: 5
   mArriveRadius: 2.5
-  mTimeToArrive: 1.5
+  mTimeToArrive: 1.33
   mWanderRadius: 0.5
   mWanderDistance: 5
   mSlowSpeed: 100
